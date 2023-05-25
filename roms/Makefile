@@ -1,6 +1,5 @@
 # =============================================================================
-# lwasm assembler
-# (available from http://lwtools.projects.l-w.ca)
+# Part of Makefile from https://github.com/tomctomc/coco_roms
 # =============================================================================
 
 LWASM=lwasm --6809 --format=raw --list-nofiles --pragma=noindex0tonone --includedir=../defines
@@ -8,10 +7,10 @@ LWASM=lwasm --6809 --format=raw --list-nofiles --pragma=noindex0tonone --include
 all: verify
 
 clean:
-	rm -f *.lst auto_* *.rom joe* xaa xab xac xad a.out
+	rm -f *.lst auto_* *.rom a.out
 
-auto_symbols_coco.asm: cocodefs.asm
-	${LWASM} --symbol-dump=$@ cocodefs.asm
+auto_symbols_coco.asm: rs_const.asm rs_mem.asm rs_roms.asm rs_skip_ops.asm rs_io_area.asm
+	${LWASM} --symbol-dump=$@ rs_const.asm rs_mem.asm rs_roms.asm rs_skip_ops.asm rs_io_area.asm
 
 auto_symbols_bas.asm: bas20.rom
 
