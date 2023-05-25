@@ -1,3 +1,6 @@
+; =============================================================================
+; From https://github.com/tomctomc/coco_roms
+; =============================================================================
 
 ; ------------------------------------------
 ; Color BASIC ( v1.0, v1.1, v1.2, and v1.3 )
@@ -46,16 +49,16 @@ LA00E           LDS         #LINBUF+LBUFMX+1 ; SET STACK TO TOP OF LINE INPUT BU
 RESVEC          LDU         #LA00E          ; BASIC WARM START ENTRY (RESET)
 LA02A           CLRB                        ;
                 TFR         B,DP            ; USE PAGE 0 AS DIRECT PAGE
-                LDX         #PIA0           ; POINT X TO PIA0
-                CLR         $1,X            ; CLEAR CONTROL REGISTER A ON PIA0(U8)
+                LDX         #PIA0           ; POINT X TO PIA 0
+                CLR         $1,X            ; CLEAR CONTROL REGISTER A ON PIA 0(U8)
                 CLR         $3,X            ; CLEAR CONTROL REGISTER B
                 CLR         ,X              ; A SIDE IS INPUT
                 LDD         #$FF34
                 STA         $2,X            ; B SIDE IS OUTPUT
                 STB         $1,X            ; ENABLE PERIPHERAL REGISTERS
                 STB         $3,X            ; AND CA2, CB2 AS OUTPUTS
-                LDX         #PIA1           ; POINT X TO PIA1
-                CLR         $1,X            ; CLEAR CONTROL REGISTER A ON PIA1(U4)
+                LDX         #PIA1           ; POINT X TO PIA 1
+                CLR         $1,X            ; CLEAR CONTROL REGISTER A ON PIA 1(U4)
                 CLR         $3,X            ; CLEAR CONTROL REGISTER B
                 DECA                        ;  A - REG NOW HAS $FE
                 STA         ,X              ; BITS 1-7 ARE OUTPUTS, BIT 0 IS INPUT ON SIDE A
@@ -124,24 +127,24 @@ LA0BA           STX         TOPRAM          ; SET TOP OF RAM POINTER
                 iflt        VERBAS-20
 ; -----------------------------------------------------------------------------
 RESVEC          LEAY        <LA00E,PCR      ; POINT Y TO WARM START CHECK CODE
-LA02A           LDX         #PIA1           ; POINT X TO PIA1
-                CLR         -3,X            ; CLEAR PIA0 CONTROL REGISTER A
-                CLR         -1,X            ; CLEAR PIA0 CONTROL REGISTER B
-                CLR         -4,X            ; SET PIA0 SIDE A TO INPUT
+LA02A           LDX         #PIA1           ; POINT X TO PIA 1
+                CLR         -3,X            ; CLEAR PIA 0 CONTROL REGISTER A
+                CLR         -1,X            ; CLEAR PIA 0 CONTROL REGISTER B
+                CLR         -4,X            ; SET PIA 0 SIDE A TO INPUT
                 LDD         #$FF34
-                STA         -2,X            ; SET PIA0 SIDE B TO OUTPUT
-                STB         -3,X            ; ENABLE PIA0 PERIPHERAL REGISTERS, DISABLE
+                STA         -2,X            ; SET PIA 0 SIDE B TO OUTPUT
+                STB         -3,X            ; ENABLE PIA 0 PERIPHERAL REGISTERS, DISABLE
                 STB         -1,X            ; MPU INTERRUPTS, SET CA2, CA1 TO OUTPUTS
 
 
 
-                CLR         1,X             ; CLEAR CONTROL REGISTER A ON PIA1
-                CLR         3,X             ; CLEAR CONTROL REGISTER B ON PIA1
+                CLR         1,X             ; CLEAR CONTROL REGISTER A ON PIA 1
+                CLR         3,X             ; CLEAR CONTROL REGISTER B ON PIA 1
                 DECA                        ;  A REG NOW HAS $FE
-                STA         ,X              ; BITS 1-7 ARE OUTPUTS, BIT 0 IS INPUT ON PIA1
+                STA         ,X              ; BITS 1-7 ARE OUTPUTS, BIT 0 IS INPUT ON PIA 1
                 LDA         #$F8
                 STA         2,X             ; BITS 0-2 ARE INPUTS, BITS 3-7 ARE OUTPUTS
-                STB         1,X             ; ENABLE PERIPHERAL REGISTERS, DISABLE PIA1
+                STB         1,X             ; ENABLE PERIPHERAL REGISTERS, DISABLE PIA 1
                 STB         3,X             ; INTERRUPTS AND SET CA2, CB2 AS OUTPUTS
                 CLR         2,X             ; SET 6847 MODE TO ALPHA-NUMERIC
                 LDB         #$02
@@ -599,7 +602,7 @@ LA22D           LDA         #$7F            ; COLUMN STROBE
                 RTS                         ; RETURN
 
 ; READ THE KEYBOARD
-LA238           LDA         PIA0            ; READ PIA0, PORT A TO SEE IF KEY IS DOWN
+LA238           LDA         PIA0            ; READ PIA 0, PORT A TO SEE IF KEY IS DOWN
 ; A BIT WILL BE ZERO IF ONE IS
                 ORA         #$80            ; MASK OFF THE JOYSTICK COMPARATOR INPUT
                 TST         PIA0+2          ; ARE WE STROBING COLUMN 7
@@ -639,7 +642,7 @@ KEYIN           PSHS        B,X,U           ; SAVE REGISTERS
                 BSR         LA1C8           ; GET KEYSTROKE
                 TSTA                        ;  SET FLAGS
                 PULS        B,X,U,PC        ; RESTORE REGISTERS
-LA1C8           LDU         #PIA0           ; POINT TO PIA0
+LA1C8           LDU         #PIA0           ; POINT TO PIA 0
                 LDX         #KEYBUF         ; KEYBOARD MEMORY BUFFER
                 CLRA                        ;  CLEAR CARRY FLAG, SET COLUMN COUNTER
                 DECA                        ;  (ACCA) TO $FF
@@ -705,7 +708,7 @@ LA22E           LDA         #$7F            ; COLUMN STROBE
                 RTS                         ; RETURN
 ; READ THE KEYBOARD
 LA237           STB         2,U             ; SAVE NEW COLUMN STROBE VALUE
-LA239           LDA         ,U              ; READ PIA0, PORT A TO SEE IF KEY IS DOWN
+LA239           LDA         ,U              ; READ PIA 0, PORT A TO SEE IF KEY IS DOWN
 ; A BIT WILL BE ZERO IF ONE IS
                 ORA         #$80            ; MASK OFF THE JOYSTICK COMPARATOR INPUT
                 TST         2,U             ; ARE WE STROBING COLUMN 7
@@ -771,7 +774,7 @@ KEYIN1          JMP         >KEYIN
 
 
 KEYIN           PSHS        U,X,B           ; SAVE REGISTERS
-                LDU         #PIA0           ; POINT U TO PIA0
+                LDU         #PIA0           ; POINT U TO PIA 0
                 LDX         #KEYBUF         ; POINT X TO KEYBOARD MEMORY BUFFER
                 CLRA                        ;  CLEAR CARRY FLAG, SET COLUMN COUNTER (ACCA)
                 DECA                        ;  TO $FF
@@ -833,7 +836,7 @@ LA22E           LDA         #$7F            ; COLUMN STROBE
                 RTS                         ; RETURN
 ; READ THE KEYBOARD
 LA238           STB         2,U             ; SAVE NEW COLUMN STROBE VALUE
-LA23A           LDA         ,U              ; READ PIA0, PORT A TO SEE IF KEY IS DOWN
+LA23A           LDA         ,U              ; READ PIA 0, PORT A TO SEE IF KEY IS DOWN
 ; A BIT WILL BE ZERO IF ONE IS
                 ORA         #$80            ; MASK OFF THE JOYSTICK COMPARATOR INPUT
                 TST         $02,U           ; ARE WE STROBING COLUMN 7?
@@ -929,7 +932,7 @@ LA2C8           PSHS        B               ; SAVE BIT COUNTER
                 LSRA                        ;  ROTATE NEXT BIT OF OUTPUT CHARACTER TO CARRY FLAG
                 ROLB                        ;  ROTATE CARRY FLAG INTO BIT ONE
                 ROLB                        ;  AND ALL OTHER BITS SET TO ZERO
-                STB         DA              ; STORE IT TO DA CONVERTER
+                STB         DA              ; STORE IT TO D/A CONVERTER
                 BSR         LA302           ; GO WAIT A WHILE
                 NOP                         ;
                 NOP                         ;
@@ -1931,9 +1934,9 @@ SOUND           BSR         LA942           ; EVALUATE EXPRESSION (FREQUENCY)
 LA951           LDA         #4              ; CONSTANT FACTOR
                 MUL                         ;  EXPAND LENGTH EXPRESSION
                 STD         SNDDUR          ; SAVE LENGTH OF SOUND
-                LDA         PIA0+3          ; GET CONTROL REGISTER OF PIA0, PORT B
+                LDA         PIA0+3          ; GET CONTROL REGISTER OF PIA 0, PORT B
                 ORA         #1
-                STA         PIA0+3          ; ENABLE 60 HZ INTERRUPT (PIA0 IRQ)
+                STA         PIA0+3          ; ENABLE 60 HZ INTERRUPT (PIA 0 IRQ)
                 CLR         ARYDIS          ; CLEAR THE ARRAY DISABLE FLAG - FOR NO APPARENT REASON
                 BSR         LA9A2           ; CONNECT D/A SOUND INPUT TO OUTPUT OF SOUND MUX
                 BSR         LA976           ; TURN ON AUDIO - ENABLE SOUND MUX
@@ -1951,7 +1954,7 @@ LA974           CLRA                        ;  BIT 3 OF ACCA = 0, DISABLE ANALOG
                 FCB         SKP2            ; SKIP TWO BYTES
 LA976           LDA         #8              ; BIT 3 OF ACCA = 1, ENABLE ANALOG MUX
                 STA         ,-S             ; SAVE ACCA ON STACK
-                LDA         PIA1+3          ; GET CONTROL REGISTER OF PIA1, PORT B
+                LDA         PIA1+3          ; GET CONTROL REGISTER OF PIA 1, PORT B
                 ANDA        #$F7            ; RESET BIT 3
                 ORA         ,S+             ; OR IN BIT 3 OF ACCA (SAVED ON STACK)
                 STA         PIA1+3          ; SET/RESET CB2 OF U4
@@ -1974,7 +1977,7 @@ AUDIO           TFR         A,B             ; SAVE ON/OFF TOKEN IN ACCB
                 BRA         LA976           ; ENABLE SOUND MULTIPLEXER
 ; THIS ROUTINE WILL TRANSFER BIT 0 OF ACCB TO SEL 1 OF
 ; THE ANALOG MULTIPLEXER AND BIT 1 OF ACCB TO SEL 2.
-LA9A2           LDU         #PIA0+1         ; POINT U TO PIA0 CONTROL REG
+LA9A2           LDU         #PIA0+1         ; POINT U TO PIA 0 CONTROL REG
                 BSR         LA9A7           ; PROGRAM 1ST CONTROL REGISTER
 LA9A7           LDA         ,U              ; GET PIA CONTROL REGISTER
                 ANDA        #$F7            ; RESET CA2 (CB2) OUTPUT BIT
@@ -1986,7 +1989,7 @@ LA9B0           STA         ,U++            ; PUT IT BACK IN THE PIA CONTROL REG
 ; IRQ SERVICE
 BIRQSV          LDA         PIA0+3          ; CHECK FOR 60HZ INTERRUPT
                 BPL         LA9C5           ; RETURN IF 63.5 MICROSECOND INTERRUPT
-                LDA         PIA0+2          ; RESET PIA0, PORT B INTERRUPT FLAG
+                LDA         PIA0+2          ; RESET PIA 0, PORT B INTERRUPT FLAG
 LA9BB           LDX         >SNDDUR         ; GET INTERRUPT TIMER (SOUND COMMAND)
                 BEQ         LA9C5           ; RETURN IF TIMER = 0
                 LEAX        -1,X            ; DECREMENT TIMER IF NOT = 0
