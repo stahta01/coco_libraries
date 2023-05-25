@@ -1,3 +1,6 @@
+; =============================================================================
+; From https://github.com/tomctomc/coco_roms
+; =============================================================================
 
 ; Super Color BASIC 2.0
 ; Copied from the PDF version of Super Color BASIC Unravelled.
@@ -124,7 +127,7 @@ SC056           LDA         ,X+             ; GET A BYTE FROM THE IMAGE
                 LDA         #$02
                 STA         ,X              ; SET THE DA OUTPUT TO ZERO AND THE RS232 OUTPUT TO MARKING
                 LDA         #$FF
-; INITIALIZE PIA0
+; INITIALIZE PIA 0
                 LDX         #PIA0           ; POINT X TO PIA 0
                 CLR         $01,X           ; CLEAR CONTROL REGISTER A; ENABLE BOTH DATA DIRECTION REGISTERS
                 CLR         $03,X           ; CLEAR CONTROL REGISTER B; ENABLE BOTH DATA DIRECTION REGISTERS
