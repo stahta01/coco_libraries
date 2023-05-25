@@ -1,3 +1,7 @@
+; =============================================================================
+; From https://github.com/tomctomc/coco_roms
+; =============================================================================
+
 ; Extended Color BASIC 1.1
 ; Copied from the PDF version of Extended Color BASIC Unravelled.
 ; Fixed up to assemble in Mamou
@@ -74,7 +78,7 @@ L8031           STU         ,X++            ; STORE FC ERROR AT USR ADDRESSES
                 LDX         #L8489          ; GET EXPONENTIATION ADDRESS
                 STX         EXPJMP+1        ; SAVE IT
                 JSR         >L96E6          ; GO INITIALIZE EXBAS GRAPHICS VARIABLES
-                LDA         PIA0+3          ; ENABLE PIA0 TO
+                LDA         PIA0+3          ; ENABLE PIA 0 TO
                 ORA         #$01            ; PASS 60HZ
                 STA         PIA0+3          ; INTERRUPT TO MPU
                 LDX         #$444B          ; 'DK' FIRST TWO BYTES OF DISK ROM
@@ -101,7 +105,7 @@ XBWMST          FCB         $ff
 
                 CLR         PLYTMR
                 CLR         PLYTMR+1        ; CLEAR PLAY TIMER
-                LDA         PIA0+3          ; ENABLE PIA0 TO
+                LDA         PIA0+3          ; ENABLE PIA 0 TO
                 ORA         #$01            ; PASS 60HZ
                 STA         PIA0+3          ; INTERRUPT TO MPU
                 JMP         BAWMST          ; JUMP TO BASICS WARM START
@@ -1150,7 +1154,7 @@ L8944           LDB         #$B3            ; TOKEN FOR =
                 JSR         >LB26F          ; DO A SYNTAX CHECK FOR =
                 JMP         >LB73D          ; EVALUATE EXPRESSION, RETURN VALUE IN X
 ; EXTENDED BASICS IRQ ROUTINE
-XIRQSV          LDA         PIA0+3          ; GET PIA0, PORT B CONTROL REGISTER
+XIRQSV          LDA         PIA0+3          ; GET PIA 0, PORT B CONTROL REGISTER
                 BMI         L8952           ; BRANCH IF 60 HZ INTERRUPT
                 RTI                         ; RETURN IF 63.5 MICROSECOND INTERRUPT
 L8952           LDA         PIA0+2          ; RESET PIA INTERRUPT FLAG
@@ -2994,7 +2998,7 @@ L95AC           PSHS        X,B,A           ; SAVE REGISTERS
                 STA         -4,X            ;
                 STA         -6,X            ; RESET SAMS VDG TO ALPHA-NUMERIC MODE
                 STA         -8,X            ;
-                LDA         PIA1+2          ; GET DATA FROM PIA1, PORT B
+                LDA         PIA1+2          ; GET DATA FROM PIA 1, PORT B
                 ANDA        #$07            ; FORCE ALL BITS TO ZERO, KEEP ONLY CSS DATA
                 STA         PIA1+2          ; PUT THE VDG INTO ALPHA-GRAPHICS MODE
                 PULS        A,B,X,PC        ; RETURN
@@ -3005,7 +3009,7 @@ L95CF           PSHS        X,B,A
                 MUL                         ;  GET PMODE VALUES FOR VDG GM0, GM1, GM2
                 ORB         #$80            ; FORCE BIT 7 HIGH (VDG A/G CONTROL)
                 ORB         CSSVAL          ; OR IN THE VDG CSS DATA
-                LDA         PIA1+2          ; GET PIA1, PORT B
+                LDA         PIA1+2          ; GET PIA 1, PORT B
                 ANDA        #$07            ; MASK OFF THE VDG CONTROL DATA
                 PSHS        A               ; SAVE IT
                 ORB         ,S+             ; OR IT WITH THE VDG VALUES CALCULATED ABOVE
@@ -3036,10 +3040,10 @@ L9609           LEAX        $02,X           ; NEXT BIT IN REGISTER
 L960F           LDB         #$07            ; 7 BITS IN SAM DISPLAY PAGE REGISTER
                 LDX         #SAMREG+6       ; POINT X TO SAM DISPLAY PAGE REGISTER
                 BRA         L9600           ; GO SET THE REGISTER
-L9616           LDA         PIA1+2          ; GET PIA1, PORT B
+L9616           LDA         PIA1+2          ; GET PIA 1, PORT B
                 ANDA        #$F7            ; MASK OFF VDG CSS CONTROL BIT
                 ORA         CSSVAL          ; OR IN CSS COLOR DATA
-                STA         PIA1+2          ; RESTORE IT IN PIA1
+                STA         PIA1+2          ; RESTORE IT IN PIA 1
                 RTS
 ; PMODE
 PMODETOK        CMPA        #','            ; CHECK FOR COMMA - FIRST ARGUMENT MAY BE MISSING
@@ -3831,7 +3835,7 @@ L9B49           BSR         L9B57           ; MID VALUE TO DA AND WAIT
                 BRA         L9B49           ; KEEP LOOPING
 L9B57           LDA         #$7E            ; DA MID VALUE AND RS 232 MARKING
                 NOP                         ;  DELAY SOME - FINE TUNE PLAY FREQUENCY
-L9B5A           STA         PIA1            ; STORE TO DA CONVERTER
+L9B5A           STA         PIA1            ; STORE TO D/A CONVERTER
                 LDX         ,Y              ; GET DELAY FROM OCTAVE TABLE
 L9B5F           LEAX        -1,X            ;
                 BNE         L9B5F           ; COUNT X TO ZERO - PROGRAMMABLE DELAY
@@ -3855,7 +3859,7 @@ L9B72           BSR         L9B80           ; MID VALUE TO DA AND WAIT
 ; PUT MID VALUE TO DA CONVERTER AND WAIT A WHILE
 L9B80           LDA         #$7E            ; DA CONVERTER MID VALUE AND KEEP RS 232 OUTPUT MARKING
                 NOP                         ;  DELAY SOME - FINE TUNE PLAY FREQUENCY
-L9B83           STA         PIA1            ; STORE IN DA CONVERTER
+L9B83           STA         PIA1            ; STORE IN D/A CONVERTER
                 LDA         ,X              ; GET DELAY VALUE FROM OCTAVE TABLE
 L9B88           DECA                        ;  COUNT ACCA TO ZERO - TIME DELAY
                 BNE         L9B88           ; COUNT ACCA TO ZERO - TIME DELAY
